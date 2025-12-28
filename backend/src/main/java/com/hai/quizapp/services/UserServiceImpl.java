@@ -16,6 +16,7 @@ import com.hai.quizapp.dtos.user.UserResponseDTO;
 import com.hai.quizapp.dtos.user.UserUpdateDTO;
 import com.hai.quizapp.entities.Role;
 import com.hai.quizapp.entities.User;
+import com.hai.quizapp.exceptions.DuplicateResourceException;
 import com.hai.quizapp.exceptions.ResourceNotFoundException;
 import com.hai.quizapp.repositories.RoleRepository;
 import com.hai.quizapp.repositories.UserRepository;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO createUser(UserRequestDTO requestDTO) {
         // Check if email already exists
         if (userRepository.existsByEmail(requestDTO.email())) {
-            throw new IllegalArgumentException("Email already exists: " + requestDTO.email());
+            throw new DuplicateResourceException("Email already exists: " + requestDTO.email());
         }
 
         // Get roles
@@ -89,7 +90,7 @@ public class UserServiceImpl implements UserService {
 
         if (updateDTO.email() != null && !updateDTO.email().equals(user.getEmail())) {
             if (userRepository.existsByEmail(updateDTO.email())) {
-                throw new IllegalArgumentException("Email already exists: " + updateDTO.email());
+                throw new DuplicateResourceException("Email already exists: " + updateDTO.email());
             }
             user.setEmail(updateDTO.email());
         }
