@@ -36,8 +36,8 @@ public class QuestionServiceImpl implements QuestionService {
 
         List<Answer> answers = request.getAnswers().stream()
                 .map(a -> Answer.builder()
-                .content(a.getContent())
-                .isCorrect(a.getIsCorrect())
+                .content(a.content())
+                .isCorrect(a.isCorrect())
                 .question(question)
                 .build())
                 .collect(Collectors.toList());
@@ -89,8 +89,8 @@ public class QuestionServiceImpl implements QuestionService {
 
         List<Answer> newAnswers = request.getAnswers().stream()
                 .map(a -> Answer.builder()
-                .content(a.getContent())
-                .isCorrect(a.getIsCorrect())
+                .content(a.content())
+                .isCorrect(a.isCorrect())
                 .question(question)
                 .build())
                 .collect(Collectors.toList());
@@ -114,11 +114,10 @@ public class QuestionServiceImpl implements QuestionService {
 
     private QuestionResponseDTO mapToResponseDTO(Question question) {
         List<AnswerDTO> answerDTOs = question.getAnswers().stream()
-                .map(a -> AnswerDTO.builder()
-                .id(a.getId())
-                .content(a.getContent())
-                .isCorrect(a.isCorrect())
-                .build())
+                .map(a -> new AnswerDTO(
+                a.getId(),
+                a.getContent(),
+                a.isCorrect()))
                 .collect(Collectors.toList());
 
         return QuestionResponseDTO.builder()
